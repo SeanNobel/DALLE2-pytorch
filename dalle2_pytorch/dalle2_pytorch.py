@@ -5,6 +5,7 @@ from functools import partial, wraps
 from contextlib import contextmanager
 from collections import namedtuple
 from pathlib import Path
+from termcolor import cprint
 
 import torch
 import torch.nn.functional as F
@@ -2754,6 +2755,8 @@ class Decoder(nn.Module):
         # devices
 
         cuda, cpu = torch.device('cuda'), torch.device('cpu')
+        
+        cprint(cuda, "yellow")
 
         self.cuda()
 
