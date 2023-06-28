@@ -2522,8 +2522,6 @@ class Decoder(nn.Module):
         ddim_sampling_eta = 0.                      # can be set to 0. for deterministic sampling afaict
     ):
         super().__init__()
-        
-        self.device = device
 
         # clip
 
@@ -2757,17 +2755,17 @@ class Decoder(nn.Module):
 
         # devices
 
-        # cuda, cpu = torch.device('cuda'), torch.device('cpu')
+        cuda, cpu = torch.device('cuda:2'), torch.device('cpu')
         
         cprint(unet_number, "yellow")
 
         # self.cuda()
-        self.to(self.device)
+        self.to(cuda)
 
         devices = [module_device(unet) for unet in self.unets]
 
-        self.unets.to("cpu")
-        unet.to(self.device)
+        self.unets.to(cpu)
+        unet.to(cuda)
 
         yield
 
