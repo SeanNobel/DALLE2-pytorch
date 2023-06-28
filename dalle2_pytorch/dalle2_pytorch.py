@@ -2489,7 +2489,6 @@ class Decoder(nn.Module):
         channels = 3,
         vae = tuple(),
         timesteps = 1000,
-        device = "cuda",
         sample_timesteps = None,
         image_cond_drop_prob = 0.1,
         text_cond_drop_prob = 0.5,
@@ -2522,8 +2521,6 @@ class Decoder(nn.Module):
         ddim_sampling_eta = 0.                      # can be set to 0. for deterministic sampling afaict
     ):
         super().__init__()
-        
-        self.device = device
 
         # clip
 
@@ -2757,17 +2754,16 @@ class Decoder(nn.Module):
 
         # devices
 
-        # cuda, cpu = torch.device('cuda'), torch.device('cpu')
+        cuda, cpu = torch.device('cuda'), torch.device('cpu')
         
         cprint(unet_number, "yellow")
 
-        # self.cuda()
-        self.to(self.device)
+        self.cuda()
 
         devices = [module_device(unet) for unet in self.unets]
 
-        self.unets.to("cpu")
-        unet.to(self.device)
+        self.unets.to(cpu)
+        unet.to(cuda)
 
         yield
 
