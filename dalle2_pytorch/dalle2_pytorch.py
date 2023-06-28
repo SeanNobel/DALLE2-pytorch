@@ -2489,6 +2489,7 @@ class Decoder(nn.Module):
         channels = 3,
         vae = tuple(),
         timesteps = 1000,
+        device = "cuda",
         sample_timesteps = None,
         image_cond_drop_prob = 0.1,
         text_cond_drop_prob = 0.5,
@@ -2723,6 +2724,8 @@ class Decoder(nn.Module):
         # device tracker
 
         self.register_buffer('_dummy', torch.Tensor([True]), persistent = False)
+        
+        self.device = device
 
     @property
     def device(self):
@@ -2754,17 +2757,17 @@ class Decoder(nn.Module):
 
         # devices
 
-        cuda, cpu = torch.device('cuda:3'), torch.device('cpu')
+        # cuda, cpu = torch.device('cuda'), torch.device('cpu')
         
         cprint(unet_number, "yellow")
 
         # self.cuda()
-        self.to(cuda)
+        self.to(self.device)
 
         devices = [module_device(unet) for unet in self.unets]
 
-        self.unets.to(cpu)
-        unet.to(cuda)
+        self.unets.to("cpu")
+        unet.to(self.device)
 
         yield
 
