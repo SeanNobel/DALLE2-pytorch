@@ -2756,7 +2756,7 @@ class Decoder(nn.Module):
 
         cuda, cpu = torch.device('cuda:3'), torch.device('cpu')
         
-        cprint(cuda, "yellow")
+        cprint(unet_number, "yellow")
 
         self.cuda()
 
