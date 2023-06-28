@@ -2758,7 +2758,8 @@ class Decoder(nn.Module):
         
         cprint(unet_number, "yellow")
 
-        self.cuda()
+        # self.cuda()
+        self.to(cuda)
 
         devices = [module_device(unet) for unet in self.unets]
 
