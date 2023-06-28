@@ -2522,6 +2522,8 @@ class Decoder(nn.Module):
         ddim_sampling_eta = 0.                      # can be set to 0. for deterministic sampling afaict
     ):
         super().__init__()
+        
+        self.device = device
 
         # clip
 
@@ -2724,8 +2726,6 @@ class Decoder(nn.Module):
         # device tracker
 
         self.register_buffer('_dummy', torch.Tensor([True]), persistent = False)
-        
-        self.device = device
 
     @property
     def device(self):
