@@ -1436,15 +1436,21 @@ class DiffusionPrior(nn.Module):
         timesteps = None
     ):
         timesteps = default(timesteps, self.sample_timesteps)
-
-        # in the paper, what they did was
-        # sample 2 image embeddings, choose the top 1 similarity, as judged by CLIP
-        text = repeat(text, 'b ... -> (b r) ...', r = num_samples_per_batch)
-
+        
         batch_size = text.shape[0]
         image_embed_dim = self.image_embed_dim
 
-        text_embed, text_encodings = self.clip.embed_text(text)
+        if self.clip is not None:
+            
+            # in the paper, what they did was
+            # sample 2 image embeddings, choose the top 1 similarity, as judged by CLIP
+            text = repeat(text, 'b ... -> (b r) ...', r = num_samples_per_batch)
+
+            text_embed, text_encodings = self.clip.embed_text(text)
+            
+        else:
+            text_embed, text_encodings = text, None
+
 
         text_cond = dict(text_embed = text_embed)
 
